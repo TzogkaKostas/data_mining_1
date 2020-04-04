@@ -1,7 +1,6 @@
 import pandas as pd
 import sys
 from pandas import DataFrame, concat
-import numpy as np
 
 def empty_cell(df, column):
 	for cell in df[column]:
@@ -90,4 +89,4 @@ with open("data/merged.csv", 'w+') as file:
 # gia kapoio logo ta diavazei me allo format. opote prepei na kanoume to parakatw: 
 # df22['last_review'] = pd.to_datetime(df22["last_review"]).dt.strftime('%d-%m-%y').
 # episis ta fevruarouariou einai se morfi %d-%m-%y enw apriliou se %Y-%m-%d.
-# opote 1 apo ta 2 thelei convert.
+# opote tou apriliou theloun convert
