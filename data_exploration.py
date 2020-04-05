@@ -1,6 +1,7 @@
 import pandas as pd
 import sys
 from pandas import DataFrame, concat
+import numpy
 
 def empty_cell(df, column):
 	for cell in df[column]:
@@ -16,12 +17,12 @@ def identical_columns(df1, df2, column):
 	else:
 		return False
 
-listings_feb = "data/febrouary/listings.csv"
-listings0_feb = "data/febrouary/listings0.csv"
-listings_march = "data/march/listings.csv"
-listings0_march = "data/march/listings0.csv"
-listings_apr = "data/april/listings.csv"
-listings0_apr = "data/april/listings0.csv"
+listings_feb = "../data/febrouary/listings.csv"
+listings0_feb = "../data/febrouary/listings0.csv"
+listings_march = "../data/march/listings.csv"
+listings0_march = "../data/march/listings0.csv"
+listings_apr = "../data/april/listings.csv"
+listings0_apr = "../data/april/listings0.csv"
 
 df1 = pd.read_csv(listings_feb)
 df12 = pd.read_csv(listings0_feb)
@@ -50,19 +51,20 @@ df1 = df1[needed_columns]
 df2 = df2[needed_columns]
 df3 = df3[needed_columns]
 
-with open("data/febrouary/updated_feb.csv", 'w+') as file:
+
+with open("../data/febrouary/updated_feb.csv", 'w+') as file:
 	file.write(df1.to_csv(index=False))
  
-with open("data/march/updated_march.csv", 'w+') as file:
+with open("../data/march/updated_march.csv", 'w+') as file:
 	file.write(df2.to_csv(index=False))
  
-with open("data/april/updated_april.csv", 'w+') as file:
+with open("../data/april/updated_april.csv", 'w+') as file:
 	file.write(df3.to_csv(index=False))
 
+# merge, sort and drop duplicate rows
+merged = pd.concat([df1, df2, df3]).drop_duplicates().sort_values('id')
 
-merged = pd.concat([df1, df2, df3]).sort_values('id')
-
-with open("data/merged.csv", 'w+') as file:
+with open("../data/merged.csv", 'w+') as file:
 	file.write(merged.to_csv(index=False))
 
 
