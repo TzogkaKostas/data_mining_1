@@ -44,7 +44,7 @@ df3.update(df32['neighbourhood'])
 df3['last_review'] = pd.to_datetime(df3["last_review"]).dt.strftime('%d-%m-%y')
 
 
-needed_columns = ['id', 'room_type', 'price', 'number_of_reviews', \
+needed_columns = ['id', 'name', 'room_type', 'price', 'number_of_reviews', \
 		'neighbourhood', 'transit', 'description', 'last_review']
 
 df1 = df1[needed_columns]
@@ -64,7 +64,7 @@ with open("../data/april/updated_april.csv", 'w+') as file:
 # merge, sort and drop duplicate rows
 merged = pd.concat([df1, df2, df3]).drop_duplicates().sort_values('id')
 
-with open("../data/merged.csv", 'w+') as file:
+with open("../data/train.csv", 'w+') as file:
 	file.write(merged.to_csv(index=False))
 
 
