@@ -69,7 +69,7 @@ df3 = pd.read_csv("../data/april/updated_april.csv")
 # query 7
 # temp_df = df[['id', 'neighbourhood', 'room_type']].drop_duplicates()
 # groupsby = temp_df.groupby('neighbourhood')
-# 
+
 # print("The most common room type per neighbourhood:")
 # for group in groupsby.groups:
 	# most_common = groupsby.get_group(group)['room_type'].value_counts().idxmax()
@@ -77,8 +77,8 @@ df3 = pd.read_csv("../data/april/updated_april.csv")
 
 # query 8
 # temp_df = df[['id', 'price', 'room_type']].drop_duplicates()
-# position = temp_df['price'].idxmax()
-# print("The most expensive room type is:", temp_df['room_type'][position])
+# result = temp_df.groupby('room_type').mean().nlargest(1, "price")
+# print("The most expensive (based on average price) room type is:", result.index.values[0])
 
 # query 10
 # temp_df = df[['id', 'neighbourhood']].drop_duplicates()
@@ -93,20 +93,27 @@ df3 = pd.read_csv("../data/april/updated_april.csv")
 # temp_df = df[['id', 'last_review']].drop_duplicates()
 # create_wordcloud("wordcloud_last", temp_df['last_review'].dropna().to_string())
 
-temp_df = df[['id', 'last_review']].drop_duplicates()
+# temp_df = df[['id', 'last_review']].drop_duplicates()
 
-df4 = pd.read_csv("../data/febrouary/reviews.csv")
-df5 = pd.read_csv("../data/march/reviews.csv")
-df6 = pd.read_csv("../data/april/reviews.csv")
-df4 = df4[['listing_id', 'date', 'comments']]
-df4['date'] = pd.to_datetime(df4["date"]).dt.strftime('%d-%m-%y')
-df5 = df5[['listing_id', 'date', 'comments']]
-df5['date'] = pd.to_datetime(df5["date"]).dt.strftime('%d-%m-%y')
-df6 = df6[['listing_id', 'date', 'comments']]
-df6['date'] = pd.to_datetime(df6["date"]).dt.strftime('%d-%m-%y')
+# df4 = pd.read_csv("../data/febrouary/reviews.csv")
+# df5 = pd.read_csv("../data/march/reviews.csv")
+# df6 = pd.read_csv("../data/april/reviews.csv")
+# df4 = df4[['listing_id', 'date', 'comments']]
+# df4['date'] = pd.to_datetime(df4["date"]).dt.strftime('%d-%m-%y')
+# df5 = df5[['listing_id', 'date', 'comments']]
+# df5['date'] = pd.to_datetime(df5["date"]).dt.strftime('%d-%m-%y')
+# df6 = df6[['listing_id', 'date', 'comments']]
+# df6['date'] = pd.to_datetime(df6["date"]).dt.strftime('%d-%m-%y')
 
-# all reviews
-reviews = pd.concat([df4, df5, df6]).drop_duplicates()
+# # all reviews
+# reviews = pd.concat([df4, df5, df6]).drop_duplicates()
 
-temp_df = temp_df.merge(reviews, left_on=['id', 'last_review'], right_on=['listing_id', 'date'])
-create_wordcloud("wordcloud_last2.png", temp_df['comments'].dropna().to_string())	
+# temp_df = temp_df.merge(reviews, left_on=['id', 'last_review'], right_on=['listing_id', 'date'])
+# create_wordcloud("wordcloud_last2.png", temp_df['comments'].dropna().to_string())	
+
+# query 12
+temp_df = df[['id', 'neighbourhood', 'number_of_reviews']].drop_duplicates()
+
+result = temp_df.groupby(['neighbourhood'])[['id', 'number_of_reviews']].max().reset_index()
+print("The most reviewed apartment per neighbourhood:")
+print(result[['neighbourhood', 'id']].to_string(index=False))

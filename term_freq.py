@@ -25,6 +25,7 @@ X = vectorizer.fit_transform(temp_df['description'].dropna())
 
 my_df = pd.DataFrame(X.toarray(), columns = vectorizer.get_feature_names())
 print(my_df)
+print(my_df[0])
 
 
 # print(vectorizer.get_feature_names())
