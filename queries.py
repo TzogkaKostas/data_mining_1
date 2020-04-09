@@ -76,9 +76,9 @@ df3 = pd.read_csv("../data/april/updated_april.csv")
 	# print("%s: %s" % (group, most_common))
 
 # query 8
-# temp_df = df[['id', 'price', 'room_type']].drop_duplicates()
-# result = temp_df.groupby('room_type').mean().nlargest(1, "price")
-# print("The most expensive (based on average price) room type is:", result.index.values[0])
+temp_df = df[['id', 'price', 'room_type']].drop_duplicates()
+result = temp_df.groupby('room_type').mean().nlargest(1, "price")
+print("The most expensive (based on average price) room type is:", result.index.values[0])
 
 # query 10
 # temp_df = df[['id', 'neighbourhood']].drop_duplicates()
@@ -112,8 +112,8 @@ df3 = pd.read_csv("../data/april/updated_april.csv")
 # create_wordcloud("wordcloud_last2.png", temp_df['comments'].dropna().to_string())	
 
 # query 12
-temp_df = df[['id', 'neighbourhood', 'number_of_reviews']].drop_duplicates()
-
-result = temp_df.groupby(['neighbourhood'])[['id', 'number_of_reviews']].max().reset_index()
-print("The most reviewed apartment per neighbourhood:")
-print(result[['neighbourhood', 'id']].to_string(index=False))
+# temp_df = df[['id', 'neighbourhood', 'number_of_reviews']].drop_duplicates()
+# 
+# result = temp_df.groupby(['neighbourhood'])[['id', 'number_of_reviews']].max().reset_index()
+# print("The most reviewed apartment per neighbourhood:")
+# print(result[['neighbourhood', 'id']].to_string(index=False))
