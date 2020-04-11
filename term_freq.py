@@ -4,27 +4,35 @@ from wordcloud import WordCloud, STOPWORDS
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from itertools import combinations
-from heapq import nsmallest
+from heapq import heappush, nsmallest
 from operator import itemgetter
 import nltk
 from nltk.collocations import *
 from nltk.collocations import BigramCollocationFinder, BigramAssocMeasures
+import heapq
+import numpy as np
+from scipy.sparse.linalg import LinearOperator
+from scipy.sparse.linalg import norm
+from scipy.sparse import csr_matrix
+import scipy
+
 
 def recommend(item_id, num):
+	index = temp_df.index[temp_df['id'] == item_id].tolist()[0]
 	print("Recommending", num, "listings similar to ",
-		temp_df[item_id == temp_df['id']]['name'].to_string())
+		temp_df.iloc[index]['name'])
 	print("----------------------------------------------------------\n")
 
-	best = distances[item_id]
+	best = distances[index]
 	for t in best[0 : min(100, num)]:
-		id = t[0]
+		index = t[0]
 		score = t[1]
-		row = temp_df[id == temp_df['id']]
+		row = temp_df.iloc[index]
 
 		name = row['name']
 		description = row['description']
-		print("Recommend:", name.to_string())
-		print("Description:", description.to_string())
+		print("Recommend:", name)
+		print("Description:", description)
 		print("(score:", score, ")\n")
 
 
@@ -38,7 +46,8 @@ def nbest_collocations(num):
 
 df = pd.read_csv("../data/train.csv")
 
-temp_df = df[['id', 'name', 'description']].drop_duplicates()[0 : 150]
+
+temp_df = df[['id', 'name', 'description']].drop_duplicates()[0: 10]
 temp_df['union'] = temp_df['name'].fillna('') + " " + temp_df['description'].fillna('')
 
 
@@ -47,23 +56,29 @@ stop_words = ["word1", "word2"]
 vectorizer = TfidfVectorizer(ngram_range=(1, 2), stop_words=stop_words)
 X = vectorizer.fit_transform(temp_df['union'])
 
-# all distances between dataframe rows
+size = temp_df.shape[0]
+
 distances = dict()
-for (i, id1) in enumerate(temp_df['id']):
-	for (j, id2) in enumerate(temp_df['id']):
-		if (id1 != id2):
-			score = cosine_similarity(X[i], X[j])[0][0]
-			if (id1 in distances):
-				distances[id1].append((id2, score))
-			else:
-				distances[id1] = [(id2, score)]
+for i in range(0, size):
+	heap = []
+	for j in range(i + 1, size):
+		score = cosine_similarity(X[i], X[j])[0, 0]
+		heappush(heap, (j, score))
+		if (j in distances):
+			heappush(distances[j], (i, score))
+		else:
+			distances[j] = []
+			heappush(distances[j], (i, score))
+
+	distances[i] = heap
 
 # for each row keep only the 100 smallest distances from the other rows
-for i in temp_df['id']:
+for i in range(0, size):
 	distances[i] = nsmallest(100, distances[i], key=itemgetter(1))
- 
-recommend(10595, 2)
 
-num = 10
-print("The", num, "most used collocations:")
-nbest_collocations(num)
+
+recommend(10595, 5)
+
+# num = 10
+# print("The", num, "most used collocations:")
+# nbest_collocations(num)
