@@ -23,7 +23,7 @@ def recommend(item_id, num):
 		temp_df.iloc[index]['name'])
 	print("----------------------------------------------------------\n")
 
-	best = distances[index]
+	best = similarities[index]
 	for t in best[0 : min(100, num)]:
 		index = t[0]
 		score = t[1]
@@ -45,40 +45,33 @@ def nbest_collocations(num):
 
 
 df = pd.read_csv("../data/train.csv")
-
-
-temp_df = df[['id', 'name', 'description']].drop_duplicates()[0: 10]
+temp_df = df[['id', 'name', 'description']].drop_duplicates(subset='id')
 temp_df['union'] = temp_df['name'].fillna('') + " " + temp_df['description'].fillna('')
 
-
 # unigrams and bigrams
-stop_words = ["word1", "word2"]
+stop_words = [ 'minute', 'right', 'two', 'square meter', '1st', '2nd', '3rd', '4th',
+	u'5th', 'floor', u'κοντά σε', 'city', u'place close', 'space', u'top floor',
+	u'square meter', 'th', 'penthouse', 'room', 'house', 'bedroom', 'sq',
+	u'welcome', 'Welcome', 'studio', 'area', 'one', 'sqm', 'near', 'heart',
+	u'recently', 'home', 'fully', 'metro', 'center', 'central', 'μου', 'είναι',
+	u'situated', 'located', u'Athen', u'Athens', 'apartment', 'flat'] + list(STOPWORDS)
 vectorizer = TfidfVectorizer(ngram_range=(1, 2), stop_words=stop_words)
 X = vectorizer.fit_transform(temp_df['union'])
 
+_similarities = cosine_similarity(X)
+
+n_best = 100
 size = temp_df.shape[0]
+# for each row keep only the n_best smallest distances from the other rows
+similarities = dict()
+for (i, row) in enumerate(_similarities):
+	idx = np.argpartition(row, n_best)
+	similarities[i] = []
+	for j in range(n_best):
+		similarities[i] = [(idx[j], row[idx[j]])] + similarities[i]
 
-distances = dict()
-for i in range(0, size):
-	heap = []
-	for j in range(i + 1, size):
-		score = cosine_similarity(X[i], X[j])[0, 0]
-		heappush(heap, (j, score))
-		if (j in distances):
-			heappush(distances[j], (i, score))
-		else:
-			distances[j] = []
-			heappush(distances[j], (i, score))
+recommend(10595, 100)
 
-	distances[i] = heap
-
-# for each row keep only the 100 smallest distances from the other rows
-for i in range(0, size):
-	distances[i] = nsmallest(100, distances[i], key=itemgetter(1))
-
-
-recommend(10595, 5)
-
-# num = 10
-# print("The", num, "most used collocations:")
-# nbest_collocations(num)
+num = 10
+print("The", num, "most used collocations:")
+nbest_collocations(num)
