@@ -76,9 +76,9 @@ df3 = pd.read_csv("../data/april/updated_april.csv")
 	# print("%s: %s" % (group, most_common))
 
 # query 8
-temp_df = df[['id', 'price', 'room_type']].drop_duplicates()
-result = temp_df.groupby('room_type').mean().nlargest(1, "price")
-print("The most expensive (based on average price) room type is:", result.index.values[0])
+# temp_df = df[['id', 'price', 'room_type']].drop_duplicates()
+# result = temp_df.groupby('room_type').mean().nlargest(1, "price")
+# print("The most expensive (based on average price) room type is:", result.index.values[0])
 
 # query 10
 # temp_df = df[['id', 'neighbourhood']].drop_duplicates()
@@ -93,27 +93,8 @@ print("The most expensive (based on average price) room type is:", result.index.
 # temp_df = df[['id', 'last_review']].drop_duplicates()
 # create_wordcloud("wordcloud_last", temp_df['last_review'].dropna().to_string())
 
-# temp_df = df[['id', 'last_review']].drop_duplicates()
-
-# df4 = pd.read_csv("../data/febrouary/reviews.csv")
-# df5 = pd.read_csv("../data/march/reviews.csv")
-# df6 = pd.read_csv("../data/april/reviews.csv")
-# drop comments corresponding to same room and date
-# df4 = df4[['listing_id', 'date', 'comments']].drop_duplicates(subset=['listing_id', 'date'])
-# df4['date'] = pd.to_datetime(df4["date"]).dt.strftime('%d-%m-%y')
-# drop comments corresponding to same room and date
-# df5 = df5[['listing_id', 'date', 'comments']].drop_duplicates(subset=['listing_id', 'date'])
-# df5['date'] = pd.to_datetime(df5["date"]).dt.strftime('%d-%m-%y')
-# drop comments corresponding to same room and date
-# df6 = df6[['listing_id', 'date', 'comments']].drop_duplicates(subset=['listing_id', 'date'])
-# df6['date'] = pd.to_datetime(df6["date"]).dt.strftime('%d-%m-%y')
-
-# # all reviews
-# reviews = pd.concat([df4, df5, df6]).drop_duplicates()
-
-# temp_df = temp_df.merge(reviews, left_on=['id', 'last_review'],
-#		right_on=['listing_id', 'date'], how='left')
-# create_wordcloud("wordcloud_last2.png", temp_df['comments'].dropna().to_string())	
+temp_df = df[['id', 'comments']].drop_duplicates()
+create_wordcloud("wordcloud_last2.png", temp_df['comments'].dropna().to_string())	
 
 # query 12
 # temp_df = df[['id', 'neighbourhood', 'number_of_reviews']].drop_duplicates()

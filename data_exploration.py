@@ -154,23 +154,23 @@ df3.update(df32['price'])
 
 
 # keep only the needed columns
-df1 = df1[columns]
-df2 = df2[columns]
-df3 = df3[columns]
+df1 = df1[columns + ['comments']]
+df2 = df2[columns + ['comments']]
+df3 = df3[columns + ['comments']]
 
-with open(data_path + "/febrouary/updated_feb_v2.csv", 'w+') as file:
+with open(data_path + "/febrouary/updated_feb.csv", 'w+') as file:
 	file.write(df1.to_csv(index=False))
  
-with open(data_path + "march/updated_march_v2.csv", 'w+') as file:
+with open(data_path + "march/updated_march.csv", 'w+') as file:
 	file.write(df2.to_csv(index=False))
  
-with open(data_path + "april/updated_april_v2.csv", 'w+') as file:
+with open(data_path + "april/updated_april.csv", 'w+') as file:
 	file.write(df3.to_csv(index=False))
 
 # merge, sort and drop duplicate rows
 merged = pd.concat([df1, df2, df3]).drop_duplicates().sort_values('id')
 
-with open(data_path + "train_v2.csv", 'w+') as file:
+with open(data_path + "train.csv", 'w+') as file:
 	file.write(merged.to_csv(index=False))
 
 

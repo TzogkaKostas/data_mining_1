@@ -49,12 +49,12 @@ temp_df = df[['id', 'name', 'description']].drop_duplicates(subset='id')
 temp_df['union'] = temp_df['name'].fillna('') + " " + temp_df['description'].fillna('')
 
 # unigrams and bigrams
-stop_words = [ 'minute', 'right', 'two', 'square meter', '1st', '2nd', '3rd', '4th',
-	u'5th', 'floor', u'κοντά σε', 'city', u'place close', 'space', u'top floor',
-	u'square meter', 'th', 'penthouse', 'room', 'house', 'bedroom', 'sq',
-	u'welcome', 'Welcome', 'studio', 'area', 'one', 'sqm', 'near', 'heart',
-	u'recently', 'home', 'fully', 'metro', 'center', 'central', 'μου', 'είναι',
-	u'situated', 'located', u'Athen', u'Athens', 'apartment', 'flat'] + list(STOPWORDS)
+stop_words = [u'minute',u'right',u'two',u'square meter',u'1st',u'2nd',u'3rd',u'4th',u'5th',
+u'floor',u'κοντά σε',u'city',u'place close',u'space',u'top floor',
+u'square meter',u'th',u'penthouse',u'room',u'house',u'bedroom',u'sq',u'welcome',
+u'Welcome',u'studio',u'area',u'one',u'sqm',u'near',u'heart',u'recently',u'home',
+u'fully',u'metro',u'center',u'central',u'μου',u'είναι',u'situated',u'located',
+u'Athen',u'Athens',u'apartment',u'flat'] + list(STOPWORDS)
 vectorizer = TfidfVectorizer(ngram_range=(1, 2), stop_words=stop_words)
 X = vectorizer.fit_transform(temp_df['union'])
 
