@@ -70,7 +70,7 @@ for (i, row) in enumerate(_similarities):
 	for j in range(n_best):
 		similarities[i] = [(idx[j], row[idx[j]])] + similarities[i]
 
-recommend(10595, 100)
+recommend(10595, 5)
 
 num = 10
 print("The", num, "most used collocations:")

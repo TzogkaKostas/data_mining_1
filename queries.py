@@ -98,17 +98,21 @@ print("The most expensive (based on average price) room type is:", result.index.
 # df4 = pd.read_csv("../data/febrouary/reviews.csv")
 # df5 = pd.read_csv("../data/march/reviews.csv")
 # df6 = pd.read_csv("../data/april/reviews.csv")
-# df4 = df4[['listing_id', 'date', 'comments']]
+# drop comments corresponding to same room and date
+# df4 = df4[['listing_id', 'date', 'comments']].drop_duplicates(subset=['listing_id', 'date'])
 # df4['date'] = pd.to_datetime(df4["date"]).dt.strftime('%d-%m-%y')
-# df5 = df5[['listing_id', 'date', 'comments']]
+# drop comments corresponding to same room and date
+# df5 = df5[['listing_id', 'date', 'comments']].drop_duplicates(subset=['listing_id', 'date'])
 # df5['date'] = pd.to_datetime(df5["date"]).dt.strftime('%d-%m-%y')
-# df6 = df6[['listing_id', 'date', 'comments']]
+# drop comments corresponding to same room and date
+# df6 = df6[['listing_id', 'date', 'comments']].drop_duplicates(subset=['listing_id', 'date'])
 # df6['date'] = pd.to_datetime(df6["date"]).dt.strftime('%d-%m-%y')
 
 # # all reviews
 # reviews = pd.concat([df4, df5, df6]).drop_duplicates()
 
-# temp_df = temp_df.merge(reviews, left_on=['id', 'last_review'], right_on=['listing_id', 'date'])
+# temp_df = temp_df.merge(reviews, left_on=['id', 'last_review'],
+#		right_on=['listing_id', 'date'], how='left')
 # create_wordcloud("wordcloud_last2.png", temp_df['comments'].dropna().to_string())	
 
 # query 12
