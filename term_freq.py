@@ -24,7 +24,7 @@ def recommend(item_id, num):
 	print("----------------------------------------------------------\n")
 
 	best = similarities[index]
-	for t in best[0 : min(100, num)]:
+	for t in best[::-1][1:min(100, num + 1)]:
 		index = t[0]
 		score = t[1]
 		row = temp_df.iloc[index]
@@ -33,7 +33,7 @@ def recommend(item_id, num):
 		description = row['description']
 		print("Recommend:", name)
 		print("Description:", description)
-		print("(score:", score, ")\n")
+		print("(score:%f)\n" % score)
 
 
 def nbest_collocations(num):
@@ -49,6 +49,8 @@ temp_df = df[['id', 'name', 'description']].drop_duplicates(subset='id')
 temp_df['union'] = temp_df['name'].fillna('') + " " + temp_df['description'].fillna('')
 
 # unigrams and bigrams
+import warnings
+warnings.filterwarnings('ignore') 
 stop_words = [u'minute',u'right',u'two',u'square meter',u'1st',u'2nd',u'3rd',u'4th',u'5th',
 u'floor',u'κοντά σε',u'city',u'place close',u'space',u'top floor',
 u'square meter',u'th',u'penthouse',u'room',u'house',u'bedroom',u'sq',u'welcome',
@@ -62,16 +64,17 @@ _similarities = cosine_similarity(X)
 
 n_best = 100
 size = temp_df.shape[0]
-# for each row keep only the n_best smallest distances from the other rows
+# for each row keep only the n_best most similar from the other rows
 similarities = dict()
 for (i, row) in enumerate(_similarities):
-	idx = np.argpartition(row, n_best)
+	idx = np.argsort(-row)
 	similarities[i] = []
 	for j in range(n_best):
 		similarities[i] = [(idx[j], row[idx[j]])] + similarities[i]
 
-recommend(10595, 5)
 
-num = 10
-print("The", num, "most used collocations:")
-nbest_collocations(num)
+recommend(10595, 2)
+
+# num = 10
+# print("The", num, "most used collocations:")
+# nbest_collocations(num)
